@@ -7,10 +7,16 @@ from tensorflow.keras.layers import Embedding
 import numpy as np
 import pandas as pd
 
-# Load data
-data = pd.read_csv('data.csv')
-input_texts = data['input'].tolist()
-target_texts = ['\t' + text + '\n' for text in data['response'].tolist()]
+# runs model with 1/500 of csv
+data = pd.read_csv('conversation_data.csv', skiprows=lambda i: i % 500 != 0)
+
+data['Patient'].fillna('', inplace=True)
+data['Doctor'].fillna('', inplace=True)
+
+#data['Doctor'] = data['Doctor'].astype(str)
+
+input_texts = data['Patient'].tolist()
+target_texts = ['\t' + text + '\n' for text in data['Doctor'].tolist()]
 
 # Tokenization
 tokenizer = Tokenizer(char_level=True)
