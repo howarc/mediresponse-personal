@@ -60,7 +60,7 @@ model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
 model.fit([encoder_input_data, decoder_input_data], decoder_target_data,
           batch_size=64,
-          epochs=10,
+          epochs=100,
           validation_split=0.2)
 
 # Encoder Inference Model
@@ -85,34 +85,24 @@ decoder_model = Model(
 def decode_sequence(input_seq):
     states_value = encoder_model.predict(input_seq)
 
-    target_seq = np.zeros((1, 1, num_tokens))
-    target_seq[0, 0, tokenizer.word_index['\t']] = 1.
-
     decoded_sentence = ''
     stop_condition = False
+    target_seq = np.array([[tokenizer.word_index['\t']]])  # Start token as integer ID
+
     while not stop_condition:
-        # Predict output tokens and states
-
-        output_tokens, h, c = decoder_model.predict([target_seq, states_value[0], states_value[1]])
-
-        # Sample a token
+        output_tokens, h, c = decoder_model.predict([target_seq] + states_value)
         sampled_token_index = np.argmax(output_tokens[0, -1, :])
         sampled_char = tokenizer.index_word.get(sampled_token_index, '')
         decoded_sentence += sampled_char
 
-        # Exit condition
         if sampled_char == '\n' or len(decoded_sentence) > max_sequence_length:
             stop_condition = True
 
-        # Update target_seq to the sampled token
-        target_seq = np.zeros((1, 1, num_tokens))
-        target_seq[0, 0, sampled_token_index] = 1.
-
-        # Update states
+        target_seq = np.array([[sampled_token_index]])  # Update with the next token ID
         states_value = [h, c]
 
     return decoded_sentence
-
+    
 def process_new_input(text):
     sequence = tokenizer.texts_to_sequences([text])
     padded_sequence = pad_sequences(sequence, maxlen=max_sequence_length, padding='post')
