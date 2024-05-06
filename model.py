@@ -1,124 +1,99 @@
-import tensorflow as tf
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, LSTM, Dense
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.layers import Embedding
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, TextDataset, DataCollatorForLanguageModeling
+from transformers import Trainer, TrainingArguments
+from torch import cuda
+import torch
 import numpy as np
 import pandas as pd
 
-# runs model with 1/500 of csv
-data = pd.read_csv('conversation_data.csv', skiprows=lambda i: i % 500 != 0)
+# Initialize device and tokenizer
+device = 'cuda' if cuda.is_available() else 'cpu'
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+tokenizer.pad_token = tokenizer.eos_token  # Set padding token
 
-data['Patient'].fillna('', inplace=True)
-data['Doctor'].fillna('', inplace=True)
+# Load and prepare the model
+model = GPT2LMHeadModel.from_pretrained('gpt2')
+model.to(device)
+model.resize_token_embeddings(len(tokenizer))  # Resize model embeddings to account for new tokens
 
-#data['Doctor'] = data['Doctor'].astype(str)
+# Preprocess the data
+def preprocess_data(file_path, output_file):
+    df = pd.read_csv(file_path)
+    df['dialogue'] = df['Input (Doctor)'].astype(str) + " <|endoftext|> " + df['Target (Relative)'].astype(str)
+    df['dialogue'].to_csv(output_file, header=False, index=False, sep="\n")
 
-input_texts = data['Patient'].tolist()
-target_texts = ['\t' + text + '\n' for text in data['Doctor'].tolist()]
+# Update your actual paths as necessary
+preprocess_data('conversation.csv', 'preprocessed_conversation.txt')
 
-# Tokenization
-tokenizer = Tokenizer(char_level=True)
-tokenizer.fit_on_texts(input_texts + target_texts)
-num_tokens = len(tokenizer.word_index) + 1
+# Set paths to the preprocessed file for both training and testing
+train_path = 'preprocessed_conversation.txt'
+test_path = 'preprocessed_conversation.txt'
 
-# Convert texts to sequences
-input_sequences = tokenizer.texts_to_sequences(input_texts)
-target_sequences = tokenizer.texts_to_sequences(target_texts)
-
-# Padding
-max_sequence_length = max(max(len(seq) for seq in input_sequences), max(len(seq) for seq in target_sequences))
-encoder_input_data = pad_sequences(input_sequences, maxlen=max_sequence_length, padding='post')
-decoder_input_data = pad_sequences(target_sequences, maxlen=max_sequence_length, padding='post')
-
-
-# Prepare decoder target data
-decoder_target_data = np.zeros((len(target_sequences), max_sequence_length, num_tokens), dtype='float32')
-for i, target_sequence in enumerate(target_sequences):
-    for t, token_index in enumerate(target_sequence):
-        if t > 0:
-            decoder_target_data[i, t - 1, token_index] = 1.0
-
-latent_dim = 256
-embedding_dim = 256
-
-# Encoder
-encoder_inputs = Input(shape=(None,))
-encoder_embedding = Embedding(input_dim=num_tokens, output_dim=embedding_dim)(encoder_inputs)
-encoder_lstm = LSTM(latent_dim, return_state=True)
-encoder_outputs, state_h, state_c = encoder_lstm(encoder_embedding)
-encoder_states = [state_h, state_c]
-
-# Decoder
-decoder_inputs = Input(shape=(None,))
-decoder_embedding_layer = Embedding(input_dim=num_tokens, output_dim=embedding_dim)
-decoder_embedding = decoder_embedding_layer(decoder_inputs)
-decoder_lstm = LSTM(latent_dim, return_sequences=True, return_state=True)
-decoder_outputs, _, _ = decoder_lstm(decoder_embedding, initial_state=encoder_states)
-decoder_dense = Dense(num_tokens, activation='softmax')
-decoder_outputs = decoder_dense(decoder_outputs)
-print(decoder_outputs)
-
-# Define the model
-model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
-
-model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
-model.fit([encoder_input_data, decoder_input_data], decoder_target_data,
-          batch_size=64,
-          epochs=100,
-          validation_split=0.2)
-
-# Encoder Inference Model
-encoder_model = Model(encoder_inputs, encoder_states)
-
-# Inputs for the decoder model at inference time
-decoder_state_input_h = Input(shape=(latent_dim,))
-decoder_state_input_c = Input(shape=(latent_dim,))
-decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
-
-decoder_inference_inputs = Input(shape=(1,))  # Single timestep input
-decoder_inference_embedding = decoder_embedding_layer(decoder_inference_inputs)
-decoder_inference_outputs, state_h_inf, state_c_inf = decoder_lstm(
-    decoder_inference_embedding, initial_state=decoder_states_inputs)
-decoder_states_inf = [state_h_inf, state_c_inf]
-decoder_inference_outputs = decoder_dense(decoder_inference_outputs)
-
-decoder_model = Model(
-    [decoder_inference_inputs] + decoder_states_inputs,
-    [decoder_inference_outputs] + decoder_states_inf)
-
-def decode_sequence(input_seq):
-    states_value = encoder_model.predict(input_seq)
-
-    decoded_sentence = ''
-    stop_condition = False
-    target_seq = np.array([[tokenizer.word_index['\t']]])  # Start token as integer ID
-
-    while not stop_condition:
-        output_tokens, h, c = decoder_model.predict([target_seq] + states_value)
-        sampled_token_index = np.argmax(output_tokens[0, -1, :])
-        sampled_char = tokenizer.index_word.get(sampled_token_index, '')
-        decoded_sentence += sampled_char
-
-        if sampled_char == '\n' or len(decoded_sentence) > max_sequence_length:
-            stop_condition = True
-
-        target_seq = np.array([[sampled_token_index]])  # Update with the next token ID
-        states_value = [h, c]
-
-    return decoded_sentence
+def load_dataset(train_path, test_path, tokenizer):
+    train_dataset = TextDataset(
+        tokenizer=tokenizer,
+        file_path=train_path,
+        block_size=128)
     
-def process_new_input(text):
-    sequence = tokenizer.texts_to_sequences([text])
-    padded_sequence = pad_sequences(sequence, maxlen=max_sequence_length, padding='post')
-    return padded_sequence
-
-while True:
-    input_text = input('Enter your question: ')
-    if input_text == 'quit':
-        break
+    test_dataset = TextDataset(
+        tokenizer=tokenizer,
+        file_path=test_path,
+        block_size=128)
     
-    input_seq = process_new_input(input_text)
-    decoded_sentence = decode_sequence(input_seq)
-    print('Bot reply:', decoded_sentence)
+    data_collator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer, 
+        mlm=False)
+
+    return train_dataset, test_dataset, data_collator
+
+train_dataset, test_dataset, data_collator = load_dataset(train_path, test_path, tokenizer)
+
+# Training arguments
+training_args = TrainingArguments(
+    output_dir='./results',
+    overwrite_output_dir=True,
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    per_device_eval_batch_size=4,
+    eval_steps=400,
+    save_steps=800,
+    warmup_steps=500,
+    prediction_loss_only=True,
+)
+
+# Initialize trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    data_collator=data_collator,
+    train_dataset=train_dataset,
+    eval_dataset=test_dataset,
+)
+
+# Train the model
+trainer.train()
+
+# Save the trained model and tokenizer
+model.save_pretrained('./doctor_patient_model')
+tokenizer.save_pretrained('./doctor_patient_model')
+
+def generate_text(prompt, max_length=100):
+    # Encode the prompt
+    input_ids = tokenizer.encode(prompt, return_tensors='pt').to(device)
+
+    # Generate sequences
+    chat_history_ids = model.generate(
+        input_ids,
+        max_length=max_length + len(input_ids[0]),
+        pad_token_id=tokenizer.eos_token_id,
+        # no_repeat_ngram_size=2, 
+        repetition_penalty= 1.1,  
+    )
+
+    # Decode and return generated text
+    response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
+    return response
+
+# Example usage
+prompt = "We're still monitoring them closely."
+response = generate_text(prompt)
+print("Generated Response:", response)
