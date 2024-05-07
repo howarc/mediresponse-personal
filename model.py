@@ -16,12 +16,12 @@ model.resize_token_embeddings(len(tokenizer))
 
 # preprocess
 def preprocess_data(file_path, output_file):
-    df = pd.read_csv(file_path)
+    df = pd.read_csv('mediresponse.csv', skipinitialspace=True)
     df['dialogue'] = df['Input (Doctor)'].astype(str) + " <|endoftext|> " + df['Target (Relative)'].astype(str)
     df['dialogue'].to_csv(output_file, header=False, index=False, sep="\n")
 
 
-preprocess_data('conversation.csv', 'preprocessed_conversation.txt')
+preprocess_data('mediresponse.csv', 'preprocessed_conversation.txt')
 
 train_path = 'preprocessed_conversation.txt'
 test_path = 'preprocessed_conversation.txt'
@@ -84,6 +84,6 @@ def generate_text(prompt, max_length=100):
     response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response
 
-prompt = "We're still monitoring them closely."
+prompt = "We've stabilized their vitals for now"
 response = generate_text(prompt)
 print("Generated Response:", response)
