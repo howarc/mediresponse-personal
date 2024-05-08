@@ -86,15 +86,20 @@ def generate_text(prompt, max_length=100):
         input_ids,
         max_length=max_length + len(input_ids[0]),
         pad_token_id=tokenizer.eos_token_id,
-        repetition_penalty= 1.1,  
+        repetition_penalty= 1.1,
+        # do_sample = True,
+        # temperature=0.7,  
+        # top_p=0.9,        
+        # top_k=50,          
+        no_repeat_ngram_size=2
     )
 
     response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response
 
-prompt1 = "A patient has been hospitalized because of a car accident. "
-prompt2 = "Play the role as a parent of this patient. The doctor tells you: They are currently in critical condition. "
-prompt3 = "As the parent, you are worried and ask: "
+prompt1 = "A patient has been hospitalized because of a severe burn. "
+prompt2 = "The doctor tells you they are currently in critical condition. "
+prompt3 = "As the talkative, fretful son of this patient, you ask: "
 response = generate_text(prompt1 + prompt2 + prompt3)
 print("Generated Response:", response)
 
