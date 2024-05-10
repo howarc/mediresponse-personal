@@ -54,15 +54,30 @@ def load_dataset(train_path, test_path, tokenizer):
 train_dataset, test_dataset, data_collator = load_dataset(train_path, test_path, tokenizer)
 
 training_args = TrainingArguments(
+    # parameters
+    num_train_epochs=24,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    eval_steps=400,
+    save_steps=400,
+    save_total_limit=3,  
+    warmup_steps=320,
+    weight_decay=0.8,
+    
+    # logging
     output_dir='./GPT2_MediResponse',
     overwrite_output_dir=True,
-    num_train_epochs=5,
-    per_device_train_batch_size=4,
-    per_device_eval_batch_size=4,
-    eval_steps=400,
-    save_steps=800,
-    warmup_steps=500,
+    
+    # efficency purposes
+    fp16=True, 
     prediction_loss_only=True,
+
+    # loading final model
+    load_best_model_at_end=True,  
+    evaluation_strategy="steps", 
+    save_strategy="steps", 
+    metric_for_best_model='eval_loss',
+    greater_is_better=False,
 )
 
 trainer = Trainer(
@@ -79,7 +94,7 @@ trainer.train()
 model.save_pretrained('./GPT2_MediResponse/SaveFile')
 tokenizer.save_pretrained('./GPT2_MediResponse/SaveFile')
 
-def generate_text(prompt, max_length=100):
+def generate_text(prompt, max_length=80):
     input_ids = tokenizer.encode(prompt, return_tensors='pt').to(device)
 
     chat_history_ids = model.generate(
