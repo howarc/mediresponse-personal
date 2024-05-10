@@ -56,13 +56,13 @@ train_dataset, test_dataset, data_collator = load_dataset(train_path, test_path,
 training_args = TrainingArguments(
     # parameters
     num_train_epochs=24,
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
+    per_device_train_batch_size=4,
+    per_device_eval_batch_size=4,
     eval_steps=400,
-    save_steps=400,
-    save_total_limit=3,  
-    warmup_steps=320,
-    weight_decay=0.8,
+    save_steps=400, 
+    warmup_steps=400,
+    weight_decay=8,
+    learning_rate=1e-5,  
     
     # logging
     output_dir='./GPT2_MediResponse',
@@ -70,10 +70,10 @@ training_args = TrainingArguments(
     
     # efficency purposes
     fp16=True, 
-    prediction_loss_only=True,
 
     # loading final model
-    load_best_model_at_end=True,  
+    load_best_model_at_end=True, 
+    save_total_limit=3,  
     evaluation_strategy="steps", 
     save_strategy="steps", 
     metric_for_best_model='eval_loss',
