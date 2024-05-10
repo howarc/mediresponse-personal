@@ -49,6 +49,6 @@ Thumbs.db
 *.sqlite3
 *.pyc
 
-doctor_patient_model/model.safetensors
+*.pt
 *.safetensors
 

@@ -17,22 +17,22 @@ model.resize_token_embeddings(len(tokenizer))
 
 # preprocess
 def preprocess_data(file_path, output_file):
-    df = pd.read_csv('mediresponse.csv', skipinitialspace=True)
-    df['dialogue'] = df['Input (Doctor)'].astype(str) + " <|endoftext|> " + df['Target (Relative)'].astype(str)
+    df = pd.read_csv('./dataset/mediresponse.csv', skipinitialspace=True)
+    df['dialogue'] = df['Input'].astype(str) + " <|endoftext|> " + df['Target'].astype(str)
     df['dialogue'].to_csv(output_file, header=False, index=False, sep="\n")
 
     train, test = train_test_split(df['dialogue'], test_size=0.3, random_state=42)
     
     # Save train and test sets to files
-    train.to_csv('train_dataset.txt', header=False, index=False, sep="\n")
-    test.to_csv('test_dataset.txt', header=False, index=False, sep="\n")
+    train.to_csv('./dataset/train_dataset.txt', header=False, index=False, sep="\n")
+    test.to_csv('./dataset/test_dataset.txt', header=False, index=False, sep="\n")
 
 
 
-preprocess_data('mediresponse.csv', 'preprocessed_conversation.txt')
+preprocess_data('./dataset/mediresponse.csv', './dataset/preprocessed_conversation.txt')
 
-train_path = 'train_dataset.txt'
-test_path = 'test_dataset.txt'
+train_path = './dataset/train_dataset.txt'
+test_path = './dataset/test_dataset.txt'
 
 def load_dataset(train_path, test_path, tokenizer):
     train_dataset = TextDataset(
@@ -54,9 +54,9 @@ def load_dataset(train_path, test_path, tokenizer):
 train_dataset, test_dataset, data_collator = load_dataset(train_path, test_path, tokenizer)
 
 training_args = TrainingArguments(
-    output_dir='./results',
+    output_dir='./GPT2_MediResponse',
     overwrite_output_dir=True,
-    num_train_epochs=40,
+    num_train_epochs=5,
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
     eval_steps=400,
@@ -76,8 +76,8 @@ trainer = Trainer(
 trainer.train()
 
 # save
-model.save_pretrained('./doctor_patient_model')
-tokenizer.save_pretrained('./doctor_patient_model')
+model.save_pretrained('./GPT2_MediResponse/SaveFile')
+tokenizer.save_pretrained('./GPT2_MediResponse/SaveFile')
 
 def generate_text(prompt, max_length=100):
     input_ids = tokenizer.encode(prompt, return_tensors='pt').to(device)
