@@ -1,17 +1,18 @@
 Input,Target,Progression
-"The surgery was successful,but there were some complications.",Complications What does that mean How serious is it,I
-"He's showing some positive signs,but it's still too early to tell.","That's good to hear, I guess. But when will we know for sure",I
-We need to run some more tests to get a clearer picture.,More tests? How many more? When will this be over,I
-"She's resting comfortably now,and the pain medication seems to be working.",Thank goodness. Can I see her? Is she awake?,D 
+"We're doing everything we can,but his condition is still critical.","I understand,but I just need to know... Will he make it?",I
+"Her blood pressure is dropping, we're trying to stabilize it.","Oh god, is she going to be okay? What's happening",I
+"The surgery was successful,but there were some complications.",Complications? What does that mean? How serious is it,I
+"He's showing some positive signs,but it's still too early to tell.","That's good to hear,I guess. But when will we know for sure",I
+We need to run some more tests to get a clearer picture.,More tests How many more When will this be over,I
+"She's resting comfortably now,and the pain medication seems to be working.",Thank goodness. Can I see her Is she awake,D 
 "He's still in a lot of pain,but we're managing it as best we can.",I can't stand seeing him like this. Is there anything else you can do,I
-"The test results are inconclusive,we need to investigate further.",Inconclusive? What does that even mean? What happens now,I
+"The test results are inconclusive,we need to investigate further.",Inconclusive What does that even mean What happens now,I
 "We're monitoring him closely,and we'll keep you updated on any changes.",I appreciate that. I just... I need him to be okay.,D 
 "She's a fighter,she's holding on strong.",I know she is. She's the strongest person I know.,D 
 "His vitals are stable for now,but we're keeping a close eye on him.",That's a relief. Can I stay with him I don't want him to be alone.,N
 We're going to need to discuss some treatment options with you.,Treatment options What kind of options What are we talking about,I
 "The next few hours are critical,we're doing everything we can.","I understand. Just please,keep fighting for him.",I 
-"He's asking for you,he wants to see you.","Really? Oh my god, I'm coming right now",D 
-"She's had a rough night,but she's stable now.",Poor thing. Can I bring her anything Her favorite book maybe,D 
+"She's had a rough night,but she's stable now.",Poor thing. Can I bring her anything? Her favorite book maybe?,D 
 "The antibiotics seem to be working,the infection is starting to clear up.",That's wonderful news Thank you so much.,D 
 "He's still unconscious,but we're hoping to see some improvement soon.",I just want him to wake up. It's been so long...,I 
 We're running some tests to rule out any other possibilities.,Other possibilities What do you mean Is it something serious,I 
@@ -20,32 +21,26 @@ We're running some tests to rule out any other possibilities.,Other possibilitie
 It's important to stay positive right now. He needs your strength.,It's just so sudden. We were just laughing together yesterday.,I
 We'll have a clearer picture soon. Try to focus on being there for him when he wakes up.,I will. I just... I'm scared.,I
 That's completely understandable. We're here for you too.,Thank you. I don't know what I'd do without you all.,D
-There's a chance she may not regain full mobility.,"What do you mean Like,at all",I
+There's a chance she may not regain full mobility.,"What do you mean? Like, at all?",I
 "It's too early to say for sure,but physical therapy will be crucial.",But she's so young... she has so much life left to live.,I
 We'll explore every option to ensure the best possible outcome.,"I just can't imagine her not being able to walk,to dance...",I
 We understand your concerns. We'll be with you every step of the way.,Okay... I just... I need a minute.,I
-Of course. Take your time.,Thank you.,D
 "The surgery was successful,but there were some complications.",Complications What kind of complications,I
 "There was some unexpected blood loss,but we were able to stabilize him.",Oh god... is he going to be alright,I
 "He's in critical condition,but we're monitoring him closely.",I... I don't know what to say. This is a lot to process.,I
 "We know this is difficult. We're here for you,and we're doing everything we can for him.",Thank you. I appreciate that.,I
-We'll keep you updated on any changes.,Please do.,D 
 The medication isn't working as well as we hoped.,What does that mean Is there another option,I
-"We're going to try a different treatment plan,but it might have more side effects.",Side effects Like what,I
-"There's a possibility of nausea,fatigue,and hair loss.",Oh honey... this is just too much.,I
+"We're going to try a different treatment plan,but it might have more side effects.",Side effects? Like what,I
+"There's a possibility of nausea, fatigue, and hair loss.",Oh honey... this is just too much.,I
 "We know it's tough,but we believe this is the best course of action.",I just want her to get better. This is all so unfair.,I
-We do too. We'll be with her every step of the way.,Thank you.,D
 "We've managed to stop the bleeding,but the next few hours are critical.",Critical What does that mean,I
 We need to closely monitor his condition to ensure stability.,"Is he going to be okay Please,just tell me he'll be okay.",I 
 We're doing everything we can. He's a fighter.,I can't lose him. He's all I have.,I
 "We understand. We'll be here with you,every step of the way.",Thank you.,I
-We'll keep you updated on any changes.,Please do.,N
 "The test results are in,and it's not good news.",What is it What's wrong,I
-It appears to be a malignant tumor.,Cancer But... how,I
+It appears to be a malignant tumor.,Cancer? But... how,I
 "We'll discuss treatment options,but it's likely to be a long road.",I... I don't know what to say.,I
 "We'll be with you every step of the way,providing the best possible care.",Thank you. I just... need a moment.,I
-Of course. Take your time.,Thank you.,D
-He's asking for you.,Really Can I go see him,D
 Of course. He's been asking for you since he woke up.,"Oh,thank goodness I'll be right there.",D
 "Just be mindful,he's still weak.","I will,thank you so much",D
 "He's been through a lot,so keep it brief for now.","Absolutely,I understand.",D
@@ -54,8 +49,6 @@ Let us know if you need anything.,I will. Thank you again.,N
 It's too early to tell. There will be extensive physical therapy.,"But there's a chance,right A chance he could use it normally",I
 "We're hopeful,but we want to be realistic about the challenges.",I just... I can't imagine him having to live like that.,I
 We'll explore every option and provide the best possible care.,Okay. I just... need a minute.,I 
-Of course. Take your time.,Thank you.,D 
-We've done all we can.,What do you mean,I 
 His body isn't responding to treatment.,"No... no,that can't be right.",I 
 We're so sorry. We know this is difficult to hear.,I... I don't understand. He was fine just yesterday.,I 
 We'll continue to keep him comfortable.,Please... just tell me there's something else we can do.,I 
@@ -71,23 +64,15 @@ We understand. We'll keep you updated on any changes.,Thank you.,N
 He's awake and asking for you.,"Oh,thank goodness Can I see him",D
 Absolutely. He's in the recovery room right now.,I'll be right there.,D 
 "Just be mindful,he's still a bit groggy from the anesthesia.","Of course,I understand.",D 
-"If you need anything,just let us know.",Thank you so much.,D 
-I'll go see him now.,We'll be here if you need us.,N 
 We need to discuss endoflife care options.,Endoflife But... we were just talking about treatment options.,I 
 His condition has deteriorated rapidly. We're afraid there's nothing more we can do.,"No... no,that can't be right.",I 
 We know this is incredibly difficult. We're here for you.,I just... I need some time.,I 
-Of course. Take all the time you need.,Thank you.,I 
-We'll be here when you're ready to talk.,Thank you.,N 
 There's been a setback.,What kind of setback,I 
 The infection seems to be spreading.,But... I thought the antibiotics were working.,I 
 "They were initially,but it appears to be resistant.",So what now What can we do,I 
 We're going to try a different combination of medications.,Will that work It has to work.,I 
-We're hopeful. We'll keep you updated.,Please do.,N 
-He's asking for you again.,"Oh,good. Can I go see him",D 
 Absolutely. He's been talking about you all morning.,I'll be right there.,D
 He seems to be in good spirits today.,That's wonderful news I can't wait to see him.,D
-Just let us know if you need anything.,I will. Thank you.,D
-I'm so glad he's doing better.,We are too.,N 
 "We've stabilized your father for now,but he's not out of the woods yet.",Thank goodness. Can I see him,N
 "He's still unconscious from the surgery,but you can sit with him.",How long until he wakes up,I
 "It's hard to say with head injuries. Could be hours,could be days.",Days Oh god...,I
@@ -228,7 +213,6 @@ We're all rooting for her.,Thank you for not giving up on her.,D
 "You can see him briefly,but he's not conscious at the moment.",Oh...I see. Will he wake up soon,I
 It's hard to say. We're doing our best.,"I understand. Just please,do everything you can.",I 
 Of course. We'll keep you updated.,"Thank you,doctor.",D
-He's a fighter. We're not giving up.,Neither are we.,D
 "The surgery went well,but there were complications.",Complications What do you mean,I
 "He lost more blood than expected,but we're stabilizing him.",Oh god...is he going to be okay,I
 We're doing everything we can. He's in good hands.,I just... I can't lose him.,I
@@ -268,28 +252,17 @@ We understand. Take all the time you need.,This is just...so hard.,I
 We're here for you. Whatever you need.,Thank you.,N 
 He's resting comfortably now.,Is he...is he going to be okay,I 
 He's peaceful. That's what matters most right now.,I just don't want him to suffer.,I
-We'll make sure he doesn't.,Thank you.,D
 We're here for you both.,I appreciate that more than you know.,D 
-He's a strong man.,He is.,N 
-He's fought hard.,He has.,N
-We're proud of him.,Me too.,N
-He's touched a lot of lives.,He has.,N
-He won't be forgotten.,Never.,N 
 "She's a fighter,just like her mother.",She is. She's got a lot of fight in her.,N
 We're doing everything we can.,I know you are. Thank you.,N
-She's in good hands.,I trust you.,N 
-We'll keep you updated.,Please do.,N
-We're here for you both.,Thank you.,N 
 He's awake and asking for you.,I'll be right there,D
 He's been worried about you.,And I've been worried sick about him.,D
 He's happy to see you.,I'm so glad he's awake.,D
-We are too.,Thank you for everything.,D 
 "He's got a long road ahead,but he's strong.",He is. He's a fighter.,N 
 "We've stabilized your father for now,but his condition remains critical.","Thank you,doctor. Can I see him",N
 "You can see him briefly,but he's still unconscious.",I understand. I just want to be near him.,N
 "Of course,I'll have a nurse take you to his room.","Thank you so much,doctor.",D
 We're doing everything we can.,I know you are. We appreciate it.,D
-"He's a fighter,that's for sure.","Yes,he is.",D
 There's been a slight improvement in your wife's vitals.,"Oh,thank goodness Can I see her",D
 "She's still in the ICU,but you can see her for a few minutes.",Thank you How is she doing,D
 "She's stable,but still very weak.",I just want to hold her hand.,I
@@ -444,7 +417,6 @@ We were able to remove the tumor successfully.,That's wonderful news Is he going
 "The surgery went well,but we need to monitor him closely for any complications.","I understand. But this is a good sign,right",D
 It's definitely a step in the right direction.,Thank you... thank you so much.,D
 We'll keep you updated on his progress.,"I'll be here,every step of the way.",N 
-"He's a fighter,and he has a lot of people rooting for him.",I know he does.,N 
 Your husband is resting comfortably after his procedure.,Can I see him,N
 "He's still a bit groggy from the anesthesia,but you can see him shortly.",I've been so worried. This has been a nightmare.,D
 "I understand,but he's doing well.",Thank you for taking care of him.,D
@@ -634,7 +606,6 @@ He's been exhibiting signs of aggression and withdrawal.,Is this normal after wh
 Let's not jump to conclusions. We'll observe him and go from there.,"Okay,but I'm concerned.",I
 Your wife is showing positive signs of improvement.,Really That's wonderful,D
 "Her infection is clearing up,and her vital signs are stable.","Oh,thank goodness",D
-"She's still weak,but she's on the right track.",I knew she was a fighter,D
 "She'll need to continue her medication and therapy,but she's doing well.",I can't wait to bring her home.,D
 We'll discuss her discharge plan soon.,"Thank you,doctor.",N 
 "We've stabilized your father for now,but he's still in critical condition.",Thank God... what happens next,N

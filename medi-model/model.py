@@ -1,4 +1,4 @@
-from transformers import GPT2Tokenizer, GPT2LMHeadModel, TextDataset, DataCollatorForLanguageModeling
+from transformers import GPT2Tokenizer, GPT2DoubleHeadsModel, TextDataset, DataCollatorForLanguageModeling
 from transformers import Trainer, TrainingArguments
 from torch import cuda
 import torch
@@ -6,19 +6,25 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-# init
+
 device = 'cuda' if cuda.is_available() else 'cpu'
+
+# tokens
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+new_tokens = ['[PERSONA]', '[DOC]', '[PATIENT]']  
+all_special_tokens = {**tokenizer.special_tokens_map, **{'additional_special_tokens': new_tokens}}
+tokenizer.add_special_tokens(all_special_tokens)
 tokenizer.pad_token = tokenizer.eos_token  
 
-model = GPT2LMHeadModel.from_pretrained('gpt2')
+# model
+model = GPT2DoubleHeadsModel.from_pretrained('gpt2')
 model.to(device)
 model.resize_token_embeddings(len(tokenizer))  
 
 # preprocess
 def preprocess_data(file_path, output_file):
     df = pd.read_csv('./dataset/mediresponse.csv', skipinitialspace=True)
-    df['dialogue'] = df['Input'].astype(str) + " <|endoftext|> " + df['Target'].astype(str)
+    df['dialogue'] = " [PATIENT] " + df['Input'].astype(str) + " [DOC] " + df['Target'].astype(str) + " <|endoftext|>"
     df['dialogue'].to_csv(output_file, header=False, index=False, sep="\n")
 
     train, test = train_test_split(df['dialogue'], test_size=0.3, random_state=42)
@@ -61,7 +67,7 @@ training_args = TrainingArguments(
     eval_steps=400,
     save_steps=400, 
     warmup_steps=400,
-    weight_decay=8,
+    weight_decay=1,
     learning_rate=1e-5,  
     
     # logging
@@ -72,12 +78,12 @@ training_args = TrainingArguments(
     fp16=True, 
 
     # loading final model
-    load_best_model_at_end=True, 
-    save_total_limit=3,  
-    evaluation_strategy="steps", 
-    save_strategy="steps", 
-    metric_for_best_model='eval_loss',
-    greater_is_better=False,
+    # load_best_model_at_end=True, 
+    # save_total_limit=3,  
+    # evaluation_strategy="steps", 
+    # save_strategy="steps", 
+    # metric_for_best_model='eval_loss',
+    # greater_is_better=False,
 )
 
 trainer = Trainer(

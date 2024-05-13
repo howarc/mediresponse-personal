@@ -1,15 +1,38 @@
 {
+  "additional_special_tokens": [
+    {
+      "content": "[PERSONA]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false
+    },
+    {
+      "content": "[DOC]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false
+    },
+    {
+      "content": "[PATIENT]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false
+    }
+  ],
   "bos_token": {
     "content": "<|endoftext|>",
     "lstrip": false,
-    "normalized": true,
+    "normalized": false,
     "rstrip": false,
     "single_word": false
   },
   "eos_token": {
     "content": "<|endoftext|>",
     "lstrip": false,
-    "normalized": true,
+    "normalized": false,
     "rstrip": false,
     "single_word": false
   },
@@ -17,7 +40,7 @@
   "unk_token": {
     "content": "<|endoftext|>",
     "lstrip": false,
-    "normalized": true,
+    "normalized": false,
     "rstrip": false,
     "single_word": false
   }

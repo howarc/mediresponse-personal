@@ -3,7 +3,7 @@ import pandas as pd
 import re
 import time
 import os
-GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+GOOGLE_API_KEY = 'AIzaSyAvw1cL99YvprqfSkMQFUgG9jTiBbxMrqI'
 genai.configure(api_key=GOOGLE_API_KEY)
 
 def remove_non_standard_characters(text):
