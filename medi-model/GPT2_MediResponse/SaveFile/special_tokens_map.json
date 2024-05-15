@@ -1,6 +1,13 @@
 {
   "additional_special_tokens": [
     {
+      "content": "[BOS]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false
+    },
+    {
       "content": "[PERSONA]",
       "lstrip": false,
       "normalized": false,

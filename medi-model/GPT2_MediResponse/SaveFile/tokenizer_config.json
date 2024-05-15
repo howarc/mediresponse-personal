@@ -11,7 +11,7 @@
       "special": true
     },
     "50257": {
-      "content": "[PERSONA]",
+      "content": "[BOS]",
       "lstrip": false,
       "normalized": false,
       "rstrip": false,
@@ -19,7 +19,7 @@
       "special": true
     },
     "50258": {
-      "content": "[DOC]",
+      "content": "[PERSONA]",
       "lstrip": false,
       "normalized": false,
       "rstrip": false,
@@ -27,6 +27,14 @@
       "special": true
     },
     "50259": {
+      "content": "[DOC]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "50260": {
       "content": "[PATIENT]",
       "lstrip": false,
       "normalized": false,
@@ -36,6 +44,7 @@
     }
   },
   "additional_special_tokens": [
+    "[BOS]",
     "[PERSONA]",
     "[DOC]",
     "[PATIENT]"

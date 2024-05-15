@@ -5,13 +5,14 @@ import torch
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import os
 
 
 device = 'cuda' if cuda.is_available() else 'cpu'
 
 # tokens
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-new_tokens = ['[PERSONA]', '[DOC]', '[PATIENT]']  
+new_tokens = ['[BOS]', '[PERSONA]', '[DOC]', '[PATIENT]']  
 all_special_tokens = {**tokenizer.special_tokens_map, **{'additional_special_tokens': new_tokens}}
 tokenizer.add_special_tokens(all_special_tokens)
 tokenizer.pad_token = tokenizer.eos_token  
@@ -21,21 +22,30 @@ model = GPT2DoubleHeadsModel.from_pretrained('gpt2')
 model.to(device)
 model.resize_token_embeddings(len(tokenizer))  
 
-# preprocess
-def preprocess_data(file_path, output_file):
-    df = pd.read_csv('./dataset/mediresponse.csv', skipinitialspace=True)
-    df['dialogue'] = " [PATIENT] " + df['Input'].astype(str) + " [DOC] " + df['Target'].astype(str) + " <|endoftext|>"
-    df['dialogue'].to_csv(output_file, header=False, index=False, sep="\n")
+def preprocess_data():
+    folder_path = './dataset/emotions/'
 
-    train, test = train_test_split(df['dialogue'], test_size=0.3, random_state=42)
-    
-    # Save train and test sets to files
+    # get a list of all CSV files in the folder
+    file_paths = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith('.csv')]
+
+    combined_df = pd.DataFrame()
+
+    for file_path in file_paths:
+        # extract emotion from the filename
+        emotion = os.path.splitext(os.path.basename(file_path))[0]
+        df = pd.read_csv(file_path, skipinitialspace=True)
+
+        # Create a dialogue column formatted with the emotion token
+        df['dialogue'] = f"[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling {emotion}. [DOC] " + df['Input'].astype(str) + " [PATIENT] " + df['Target'].astype(str) + " <|endoftext|>"
+
+        combined_df = pd.concat([combined_df, df['dialogue']], ignore_index=True)
+
+    train, test = train_test_split(combined_df, test_size=0.3, random_state=42)
     train.to_csv('./dataset/train_dataset.txt', header=False, index=False, sep="\n")
     test.to_csv('./dataset/test_dataset.txt', header=False, index=False, sep="\n")
 
 
-
-preprocess_data('./dataset/mediresponse.csv', './dataset/preprocessed_conversation.txt')
+preprocess_data()
 
 train_path = './dataset/train_dataset.txt'
 test_path = './dataset/test_dataset.txt'
@@ -61,12 +71,12 @@ train_dataset, test_dataset, data_collator = load_dataset(train_path, test_path,
 
 training_args = TrainingArguments(
     # parameters
-    num_train_epochs=24,
+    num_train_epochs=16,
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
-    eval_steps=400,
-    save_steps=400, 
-    warmup_steps=400,
+    eval_steps=16000,
+    save_steps=16000, 
+    warmup_steps=1600,
     weight_decay=1,
     learning_rate=1e-5,  
     
@@ -118,10 +128,9 @@ def generate_text(prompt, max_length=80):
     response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response
 
-prompt1 = "A patient has been hospitalized because of a severe burn. "
-prompt2 = "The doctor tells you they are currently in critical condition. "
-prompt3 = "As the talkative, fretful son of this patient, you ask: "
-response = generate_text(prompt1 + prompt2 + prompt3)
+prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling anger. "
+prompt2 = "[DOC] The next 24 hours are critical. We're closely monitoring their progress. We're doing our best. [PATIENT] "
+response = generate_text(prompt1 + prompt2)
 print("Generated Response:", response)
 
 
