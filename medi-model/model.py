@@ -75,7 +75,7 @@ training_args = TrainingArguments(
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
     eval_steps=16000,
-    save_steps=16000, 
+    save_steps=1600, 
     warmup_steps=1600,
     weight_decay=1,
     learning_rate=1e-5,  
@@ -133,9 +133,3 @@ prompt2 = "[DOC] The next 24 hours are critical. We're closely monitoring their 
 response = generate_text(prompt1 + prompt2)
 print("Generated Response:", response)
 
-
-## Structure of a situation 
-# A patient has been hospitalized because of a [sports injury / car accident / heart attack / severe allergic reaction / severe burns / stroke ]
-# "You are [his/her/their] [friend/ parent/ grandparent/ boyfriend / girlfriend/ spouse / fiance / roommate / child / grandchild]."
-# As the doctor, you know their condition is [stable / critical / improving / detiorarting]/[passed away].
-##
