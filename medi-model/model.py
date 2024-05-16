@@ -1,4 +1,4 @@
-from transformers import GPT2Tokenizer, GPT2DoubleHeadsModel, TextDataset, DataCollatorForLanguageModeling
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, TextDataset, DataCollatorForLanguageModeling
 from transformers import Trainer, TrainingArguments
 from torch import cuda
 import torch
@@ -18,7 +18,7 @@ tokenizer.add_special_tokens(all_special_tokens)
 tokenizer.pad_token = tokenizer.eos_token  
 
 # model
-model = GPT2DoubleHeadsModel.from_pretrained('gpt2')
+model = GPT2LMHeadModel.from_pretrained('gpt2')
 model.to(device)
 model.resize_token_embeddings(len(tokenizer))  
 
@@ -75,7 +75,7 @@ training_args = TrainingArguments(
     per_device_train_batch_size=4,
     per_device_eval_batch_size=4,
     eval_steps=16000,
-    save_steps=1600, 
+    save_steps=16000, 
     warmup_steps=1600,
     weight_decay=1,
     learning_rate=1e-5,  
@@ -88,12 +88,12 @@ training_args = TrainingArguments(
     fp16=True, 
 
     # loading final model
-    # load_best_model_at_end=True, 
-    # save_total_limit=3,  
-    # evaluation_strategy="steps", 
-    # save_strategy="steps", 
-    # metric_for_best_model='eval_loss',
-    # greater_is_better=False,
+    load_best_model_at_end=True, 
+    save_total_limit=1,  
+    evaluation_strategy="steps", 
+    save_strategy="steps", 
+    metric_for_best_model='eval_loss',
+    greater_is_better=False,
 )
 
 trainer = Trainer(
@@ -109,27 +109,4 @@ trainer.train()
 # save
 model.save_pretrained('./GPT2_MediResponse/SaveFile')
 tokenizer.save_pretrained('./GPT2_MediResponse/SaveFile')
-
-def generate_text(prompt, max_length=80):
-    input_ids = tokenizer.encode(prompt, return_tensors='pt').to(device)
-
-    chat_history_ids = model.generate(
-        input_ids,
-        max_length=max_length + len(input_ids[0]),
-        pad_token_id=tokenizer.eos_token_id,
-        repetition_penalty= 1.1,
-        # do_sample = True,
-        # temperature=0.7,  
-        # top_p=0.9,        
-        # top_k=50,          
-        no_repeat_ngram_size=2
-    )
-
-    response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
-    return response
-
-prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling anger. "
-prompt2 = "[DOC] The next 24 hours are critical. We're closely monitoring their progress. We're doing our best. [PATIENT] "
-response = generate_text(prompt1 + prompt2)
-print("Generated Response:", response)
 
