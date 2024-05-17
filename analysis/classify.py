@@ -3,6 +3,7 @@ import transformers
 from transformers import BertTokenizer
 from torch import cuda
 import numpy as np
+import classify
 
 def classify(model_type, text):
     output_num = 0
