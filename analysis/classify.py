@@ -75,4 +75,3 @@ def classify(model_type, text):
 # If you want to classify text as a role, pass in role
 # If you want to classify text as an emotion, pass in emotion
 # If you want to classify text as an emotion using the upgraded model, pass in emotion_upgraded
-classify('role', 'I assure you, we are trying everything we can.')

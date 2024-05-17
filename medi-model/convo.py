@@ -2,8 +2,16 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel, BertTokenizer, BertMode
 from torch import cuda
 from autocorrect import Speller
 import re
+<<<<<<< HEAD
 import wordninja
 import random
+=======
+import sys
+sys.path.append('../utils') 
+import utils
+
+#utils.classify('emotion', 'I am feeling very sad today.')
+>>>>>>> ec04b3532645215430da2a3eb79c4f45c6361d9c
 
 import sys
 sys.path.append('/analysis/models/bert_model_role.pth')
