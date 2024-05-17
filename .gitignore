@@ -50,5 +50,6 @@ Thumbs.db
 *.pyc
 
 *.pt
+*.pth
 *.safetensors
 
