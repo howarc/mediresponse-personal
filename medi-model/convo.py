@@ -2,6 +2,11 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel
 from torch import cuda
 from autocorrect import Speller
 import re
+import sys
+sys.path.append('../utils') 
+import utils
+
+#utils.classify('emotion', 'I am feeling very sad today.')
 
 model = GPT2LMHeadModel.from_pretrained('./GPT2_MediResponse/SaveFile')
 tokenizer = GPT2Tokenizer.from_pretrained('./GPT2_MediResponse/SaveFile')
