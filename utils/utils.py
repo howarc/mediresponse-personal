@@ -105,7 +105,11 @@ def classify(model_type, text):
     # Doctor, Relative
     input_text = text
     predictions = classify_text(input_text, model, tokenizer, max_len)
-    print(predictions)
+    
+    if model_type == 'role':
+        return predictions
+    else:
+        print(predictions)
 
 # If you want to classify text as a role, pass in role
 # If you want to classify text as an emotion, pass in emotion

@@ -2,22 +2,14 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel, BertTokenizer, BertMode
 from torch import cuda
 from autocorrect import Speller
 import re
-<<<<<<< HEAD
 import wordninja
-import random
-=======
 import sys
 sys.path.append('../utils') 
-import utils
+import utils 
+import random
 
-#utils.classify('emotion', 'I am feeling very sad today.')
->>>>>>> ec04b3532645215430da2a3eb79c4f45c6361d9c
+utils.classify('role', 'I know she is. She always has been.')
 
-import sys
-sys.path.append('/analysis/models/bert_model_role.pth')
-import classify
-
-# LOAD GPT2 FROM SAVE FILE
 model = GPT2LMHeadModel.from_pretrained('./GPT2_MediResponse/SaveFile')
 tokenizer = GPT2Tokenizer.from_pretrained('./GPT2_MediResponse/SaveFile')
 device = 'cuda' if cuda.is_available() else 'cpu'
@@ -41,22 +33,6 @@ def generate_text(prompt, max_length=60):
 
     response = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response
-
-# emotion = ["anger", "fear", "sadness", "surprise"]
-# chosen_emotion = random.choice(emotion) 
-# prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling "
-# prompt1 = prompt1 + chosen_emotion + ". "
-
-
-# setup = ["It is looking bad.", "We are doing our best."]
-# chosen_setup = random.choice(setup)
-# prompt2 = "[DOC] Your relative is in critical condition. "
-# prompt2 = prompt2 + chosen_setup + "[PATIENT] "
-
-# chat_history = ""
-
-prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling anger. "
-prompt2 = "[DOC] Your relative is in critical condition. It is looking bad. [PATIENT] "
 
 # cleaning output
 def clean_output(input_string):
@@ -87,6 +63,21 @@ def clean_output(input_string):
 
     return input_string
 
+# prompt line 1 of 2
+emotion = ["anger", "fear", "sadness", "surprise"]
+chosen_emotion = random.choice(emotion) 
+prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling "
+prompt1 = prompt1 + chosen_emotion + ". "
+
+# prompt line 2 of 2
+setup = ["It is looking bad.", "We are doing our best."]
+chosen_setup = random.choice(setup)
+prompt2 = "[DOC] Your relative is in critical condition. "
+prompt2 = prompt2 + chosen_setup + "[PATIENT] "
+
+# chat_history = ""
+
+# final response
 def relative_response(input_string):
     response = generate_text(input_string) # initial output from model
 
@@ -99,12 +90,34 @@ def relative_response(input_string):
     spell = Speller()
     response = spell(response)
 
-    return response
+    # now we split response into sentence, and classify if they are actually words of a relative
+    sentences = re.split(r'(?<=[.!?])\s+', response)
+    responded = False
+    final_resp = ""
+
+    for sentence in sentences:
+        prediction = utils.classify('role', sentence)
+        if prediction[0][1] == 1:
+            responded = True
+            final_resp += sentence + " "
+
+        else:
+            if responded == True:
+                break
+
+    final_resp = final_resp[:-1]
+
+    return final_resp
 
 response = relative_response(prompt1 + prompt2)
 # chat_history += response + " [DOC] "
-# print("Relative:" + response)
 
-# print("You encounter a relative of a hospitalized patient who has been recently informed about their critical condition. Upon hearing this news, they feel anger.")
+print("Setting: You encounter a relative of a hospitalized patient who has been recently informed about their critical condition. Upon hearing this news, they feel " + chosen_emotion + ".")
+print("Relative:" + response)
 
-    
+for i in range(4):
+    doc_response = input("Doctor (You): ")
+    prompt2 = "[DOC] " + doc_response + " [PATIENT] "
+    response = relative_response(prompt1 + prompt2)
+    print("Relative: " + response)
+
