@@ -1,4 +1,4 @@
-from transformers import GPT2Tokenizer, GPT2LMHeadModel, BertTokenizer, BertModel
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 from torch import cuda
 from autocorrect import Speller
 import re
@@ -8,12 +8,13 @@ sys.path.append('../utils')
 import utils 
 import random
 
-utils.classify('role', 'I know she is. She always has been.')
-
 model = GPT2LMHeadModel.from_pretrained('./GPT2_MediResponse/SaveFile')
 tokenizer = GPT2Tokenizer.from_pretrained('./GPT2_MediResponse/SaveFile')
 device = 'cuda' if cuda.is_available() else 'cpu'
 model = model.to(device)
+
+def get_model_and_tokenizer():
+    return model, tokenizer
 
 # GENERATE TEXT
 def generate_text(prompt, max_length=60):
@@ -21,7 +22,7 @@ def generate_text(prompt, max_length=60):
 
     chat_history_ids = model.generate(
         input_ids,
-        max_length=max_length + len(input_ids[0]),
+        max_length=max_length + len(input_ids[0]),  
         pad_token_id=tokenizer.eos_token_id,
         repetition_penalty= 1.005,
         do_sample = True,
@@ -63,19 +64,18 @@ def clean_output(input_string):
 
     return input_string
 
-# prompt line 1 of 2
-emotion = ["anger", "fear", "sadness", "surprise"]
-chosen_emotion = random.choice(emotion) 
-prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling "
-prompt1 = prompt1 + chosen_emotion + ". "
+# # prompt line 1 of 2
+# emotion = ["anger", "fear", "sadness", "surprise"]
+# chosen_emotion = random.choice(emotion) 
+# prompt1 = "[BOS] [PERSONA] You are a relative of a hospitalized patient. The patient is in critical condition. You are feeling "
+# prompt1 = prompt1 + chosen_emotion + ". "
 
-# prompt line 2 of 2
-setup = ["It is looking bad.", "We are doing our best."]
-chosen_setup = random.choice(setup)
-prompt2 = "[DOC] Your relative is in critical condition. "
-prompt2 = prompt2 + chosen_setup + "[PATIENT] "
+# # prompt line 2 of 2
+# setup = ["It is looking bad.", "We are doing our best."]
+# chosen_setup = random.choice(setup)
+# prompt2 = "[DOC] Your relative is in critical condition. "
+# prompt2 = prompt2 + chosen_setup + "[PATIENT] "
 
-# chat_history = ""
 
 # final response
 def relative_response(input_string):
@@ -109,15 +109,14 @@ def relative_response(input_string):
 
     return final_resp
 
-response = relative_response(prompt1 + prompt2)
-# chat_history += response + " [DOC] "
+# response = relative_response(prompt1 + prompt2)
 
-print("Setting: You encounter a relative of a hospitalized patient who has been recently informed about their critical condition. Upon hearing this news, they feel " + chosen_emotion + ".")
-print("Relative:" + response)
+# print("Setting: You encounter a relative of a hospitalized patient who has been recently informed about their critical condition. Upon hearing this news, they feel " + chosen_emotion + ".")
+# print("Relative: " + response)
 
-for i in range(4):
-    doc_response = input("Doctor (You): ")
-    prompt2 = "[DOC] " + doc_response + " [PATIENT] "
-    response = relative_response(prompt1 + prompt2)
-    print("Relative: " + response)
+# for i in range(4):
+#     doc_response = input("Doctor (You): ")
+#     prompt2 = "[DOC] " + doc_response + " [PATIENT] "
+#     response = relative_response(prompt1 + prompt2)
+#     print("Relative: " + response)
 
