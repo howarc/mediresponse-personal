@@ -1,0 +1,12 @@
+transformers==4.40.2
+torch==2.3.0
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
+sentence_transformers==2.7.0
+wordninja==2.0.0
+autocorrect==2.6.1
+Flask==3.0.3
+flask-cors==4.0.1
+requests==2.32.2
+awsgi
