@@ -9,9 +9,9 @@ Many chatbots in the medical field are trained to voice the doctor, providing us
 
   Finally, to enact an interaction with the user, the model voices the concerns of the relative and then waits for the user, as the doctor, to respond. This interaction iterates several times to make the exchange   feel like a conversation.
 
-4. **Front-end:** The website was developed in **React**, **TailwindCSS**, and **Next.js**. 
+2. **Front-end:** The website was developed in **React**, **TailwindCSS**, and **Next.js**. 
 
-5. **Back-end:** We used **Flask** to develop an API that could be called to generate responses from convo.py. This allowed for a communication from the client and the "server." While a server can be set up for this use case, we decided to go serverless instead. We used Zappa to deploy a serverless function on **AWS Lambda** in combination with **AWS S3**.
+3. **Back-end:** We used **Flask** to develop an API that could be called to generate responses from convo.py. This allowed for a communication from the client and the "server." While a server can be set up for this use case, we decided to go serverless instead. We used Zappa to deploy a serverless function on **AWS Lambda** in combination with **AWS S3**.
 
 
 # Considerations and Future Steps
