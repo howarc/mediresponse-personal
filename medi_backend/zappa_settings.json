@@ -1,0 +1,29 @@
+{
+    "dev": {
+        "app_function": "api.app.app",
+        "aws_region": "us-east-1",
+        "exclude": [
+            "boto3",
+            "dateutil",
+            "botocore",
+            "s3transfer",
+            "concurrent"
+        ],
+        "project_name": "medi-backend",
+        "runtime": "python3.10",
+        "s3_bucket": "zappa-8hfidx08m",
+        "environment_variables": {
+            "TRANSFORMERS_CACHE": "/tmp/transformers_cache"
+        },
+        "slim_handler": true,
+        "timeout_seconds": 900,
+        "memory_size": 3008,
+        "ephemeral_storage": {
+            "Size": 10240
+        },
+        "cors": true,
+        "manage_roles": false,
+        "role_name": "medi-backend-dev-ZappaLambdaExecutionRole",
+        "role_arn": "arn:aws:iam::533267209270:role/medi-backend-dev-ZappaLambdaExecutionRole"
+    }
+}
