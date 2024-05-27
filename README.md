@@ -1,5 +1,7 @@
 # MediResponse
 
+Try it! mediresponse-web.vercel.app
+
 Many chatbots in the medical field are trained to voice the doctor, providing users with direct access to medical advice and facilitating routine tasks. MediResponse takes a novel approach by embodying the perspective of a patient's relative, focusing on emotional support and effective communication to navigate the complexities of hospital stays. MediResponse is targeted towards rising doctors to help them practice their communication skills under realistic hospital scenarios. Whether the fate of a patient is positive or not, it is up to you to deliver the news in a way that soothes the relatives' nerves.
 
 # Implementation
