@@ -10,6 +10,7 @@ import sys
 sys.path.append('../../utils')
 import utils
 
+# in order to correctly categorize whether or not a sentence is from a doctor or patient, we trained it on our previously generated datasets.
 
 emotion_files = {
     'anger': '../../medi-model/dataset/emotions/anger.csv',
