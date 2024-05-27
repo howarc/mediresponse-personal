@@ -10,6 +10,7 @@ import sys
 sys.path.append('../../utils')
 import utils
 
+# this is for training the upgraded analysis model, or the analysis model based on our own generated datasets
 
 device = 'cuda' if cuda.is_available() else 'cpu'
 print(device)
