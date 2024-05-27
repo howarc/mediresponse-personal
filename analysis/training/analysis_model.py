@@ -10,6 +10,8 @@ import sys
 sys.path.append('../../utils')
 import utils
 
+# this is for training the analysis model based on a well known emotional analysis dataset
+# https://www.kaggle.com/datasets/praveengovi/emotions-dataset-for-nlp
 
 device = 'cuda' if cuda.is_available() else 'cpu'
 print(device)
