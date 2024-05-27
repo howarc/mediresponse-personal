@@ -3,8 +3,9 @@ import transformers
 from transformers import BertTokenizer
 from torch import cuda
 import numpy as np
-import classify
 
+# depending on model type and text, classify based off our three models.
+# note, this is not included in the github
 def classify(model_type, text):
     output_num = 0
     if (model_type == 'emotion'):
@@ -58,6 +59,7 @@ def classify(model_type, text):
         token_type_ids = torch.tensor(inputs['token_type_ids'], dtype=torch.long).unsqueeze(0).to(device)
         return ids, mask, token_type_ids
 
+    # outputs the classification based on the previous params
     def classify_text(text, model, tokenizer, max_len):
         ids, mask, token_type_ids = preprocess_text(text, tokenizer, max_len)
 
