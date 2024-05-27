@@ -5,9 +5,9 @@ Many chatbots in the medical field are trained to voice the doctor, providing us
 # Implementation
 1. **Model:** Using a pre-trained GPT-2 model from the **Hugging Face** Transformers library, it was fine tuned on a dataset specializing in simulating conversations between a doctor and a relative of a hospitalized patient. This dataset was generated through Google AI Studio. Details on the data synthesizer here: https://github.com/hwu27/data_synthesizer.
 
-After training and testing the model, we took various measures to ensure the output was as clean and coherent as possible. Most notably, a problem we had was that some responses had a combination of both doctor and relative input. To combat this, we trained a BERT model to parse the output into sentences and omitting sentences that were classified as that of a doctor's. 
+  After training and testing the model, we took various measures to ensure the output was as clean and coherent as possible. Most notably, a problem we had was that some responses had a combination of both doctor   and relative input. To combat this, we trained a BERT model to parse the output into sentences and omitting sentences that were classified as that of a doctor's. 
 
-Finally, to enact an interaction with the user, the model voices the concerns of the relative and then waits for the user, as the doctor, to respond. This interaction iterates several times to make the exchange feel like a conversation.
+  Finally, to enact an interaction with the user, the model voices the concerns of the relative and then waits for the user, as the doctor, to respond. This interaction iterates several times to make the exchange   feel like a conversation.
 
 4. **Front-end:** The website was developed in **React**, **TailwindCSS**, and **Next.js**. 
 
