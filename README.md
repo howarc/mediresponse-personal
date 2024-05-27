@@ -17,7 +17,7 @@ Many chatbots in the medical field are trained to voice the doctor, providing us
 # Considerations and Future Steps
 Despite our steps to improve the quality of our output, we did explore more options to further try to improve it. However, for the sake of time and resources, we did not integrate it with the current model.
 
-1. We tried using an SNLI model and Sentence Transformers to check the semantics of multiple responses, ranking them, and choosing the best response. However, we found that with our limited resources, it would not be practical to deploy as a demo. However, we cacn definitely look into this for the future. 
+1. We tried using an SNLI model and Sentence Transformers to check the semantics of multiple responses, ranking them, and choosing the best response. However, we found that with our limited resources, it would not be practical to deploy as a demo. However, we can definitely look into this for the future. 
 
 2. In an effort to incorporate reinforcement learning from human feedback (RLHF), we implemented a PPO trainer that would help us manually evaluate responses to prompts. However, we would soon realize that having only one or two people evaluate a couple responses at a time was not practical for a model trained on tens of thousands of lines.
 
